@@ -43,8 +43,7 @@ SELECT *
 FROM Invoice
 WHERE BillingCountry='USA' AND BillingState<>'CA';
 
--- quastion 3. 
-
+--3. count how many customer are from Brazil or France
 SELECT count(FirstName)
 FROM Customer
 WHERE Country LIKE 'Brazil' OR Country LIKE 'France';
@@ -54,11 +53,10 @@ SELECT count(FirstName)
 FROM Customer
 WHERE Country LIKE 'Brazil' OR 'France';
 
--- quastion 4
+--4. What is the biggest invoice from customers in France
 SELECT *
 FROM Invoice
 WHERE BillingCountry='France' AND Total=(SELECT MAX(Total) FROM Invoice WHERE BillingCountry='France');
-
 
 -- quastion 4
 SELECT *
@@ -102,28 +100,3 @@ HAVING sumTotal > (
         GROUP BY BillingCountry)
         )
 ORDER BY sumTotal DESC;
-
--- quastion 10. Provide a query that includes the track name with each invoice line item.
-SELECT InvoiceLineId,
-    InvoiceId,
-        (SELECT Name
-        FROM Track
-        WHERE TrackId=InvoiceLine.TrackId) as TrackName,
-    UnitPrice,
-    Quantity
-FROM InvoiceLine
-ORDER BY TrackId;
-
--- quastion 11. Provide a query that includes the track name with each invoice line item, only for customer from Germany
-SELECT InvoiceLineId,
-    InvoiceId,
-    (SELECT Name
-    FROM Track
-    WHERE TrackId=InvoiceLine.TrackId) as TrackName,
-    UnitPrice,
-    Quantity
-FROM InvoiceLine
-WHERE (SELECT BillingCountry
-    FROM Invoice
-    WHERE InvoiceId=InvoiceLine.InvoiceId) LIKE 'Germany'
-ORDER BY TrackId;
