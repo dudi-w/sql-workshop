@@ -17,10 +17,11 @@ CREATE TABLE SearchEngine.Link(
     Path NVARCHAR(1024) UNIQUE NOT NULL,
     HostID INTEGER NOT NULL,
     FOREIGN KEY (HostID) REFERENCES Domain (ID),
+        ON DELETE NO ACTION ON UPDATE NO ACTION,
     CONSTRAINT C_Path CHECK(Path <> '')
 );
 
-CREATE TABLE SearchEngine.WordLink(
+CREATE TABLE SearchEngine.WordToLink(
     WordID INTEGER NOT NULL,
     LinkID INTEGER NOT NULL,
     Count INTEGER NOT NULL,
@@ -39,5 +40,12 @@ CREATE TABLE SearchEngine.Graph(
         ON DELETE NO ACTION ON UPDATE NO ACTION,
     FOREIGN KEY (Destination) REFERENCES Link (ID)
         ON DELETE NO ACTION ON UPDATE NO ACTION,
-    constraint k check (Count > 0)
+    CONSTRAINT C_Count CHECK(Count > 0)
+);
+
+CREATE TABLE SearchEngine.LinksRank(
+    LinkID INTEGER NOT NULL,
+    score INTEGER,
+    FOREIGN KEY (LinkID) REFERENCES word(ID)
+        ON DELETE NO ACTION ON UPDATE NO ACTION
 );
